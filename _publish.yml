@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: dbc84ab0-75f4-4dca-9aa5-7d0e8fe3134b
+      url: 'https://unknown-crazy-guy.quarto.pub/genome-sequencing'
