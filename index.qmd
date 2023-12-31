@@ -2,12 +2,12 @@
 title: "genome-sequencing"
 ---
 
-```{r, echo=FALSE, output = FALSE}
+```{r library, echo=FALSE, output=FALSE}
 library(tidyverse)
 library(ggthemes) 
 ```
 
-```{r, echo=FALSE, warning=FALSE}
+```{r car-plot, echo=FALSE, warning=FALSE}
 mtcars |>
   select(wt, mpg) |>
   ggplot(aes(wt, mpg)) +

@@ -1,0 +1,18 @@
+---
+title: "About"
+---
+
+## About Me
+
+My name is **Farhan** and I am a student at the [Ohio State University](https://www.osu.edu/){target="_blank"} studying [Computer Science](https://cse.osu.edu/){target="_blank"} and
+[Mathematics](https://math.osu.edu/){target="_blank"}
+
+## About the Project
+The project is about *Genome Sequencing*. It just takes a look into the genome sequencing of a person 
+
+### Goals 
++ Fix the things that cannot be fixed
+
+This is data science
+\
+~Preceptor
