@@ -11,7 +11,7 @@ editor:
 
 ## Setup the Seurat Object
 
-For this project, I will use the publicly available PBMC dataset with more then 2700 single cells
+For this project, I will use the publicly available PBMC data set with more then 2700 single cells
 
 The libraries for this project are `dplyr`, `Seurat`, and `patchwork`
 
@@ -22,18 +22,24 @@ library(Seurat)
 library(patchwork)
 ```
 
-Loading the `PBMC` dataset from the publicly available[PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) dataset.
+Loading the `PBMC` data set from the publicly available[PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) data set.
 
-```{r, load the PBMC dataset, show=TRUE, echo=TRUE}
-# loading the dataset from the file
+```{r, load the PBMC data set, show=TRUE, echo=TRUE}
+# loading the data set from the file
 pbmc.data <- Read10X(data.dir = "C:/Users/Farhan/Documents/Genome-Sequencing/pbmc3k_filtered_gene_bc_matrices/filtered_gene_bc_matrices/hg19")
 ```
 
-Creating `Seurat` object with the `pbmc.data` dataset with a minimum cell requirement of `3` and feature of `200`.
+Creating `Seurat` object with the `pbmc.data` data set with a minimum cell requirement of `3` and feature of `200`.
 
 ```{r, initialize the object}
 # Initialize the object with non-normalized data
 pbmc <- CreateSeuratObject(pbmc.data, project = "pmbc3k", min.cells = 3, min.features = 200)
+```
+
+Take a look at the `pbmc` data set.
+
+```{r}
+str(pbmc)
 ```
 
 # Pre-processing workflow
@@ -48,8 +54,48 @@ QC Metrics to keep in mind:
 -   Number of total molecules
 -   Percentage of mitochondria
 
-Adding a new column to for the percentage of mitochondria in the dataset
+Adding a new column to for the percentage of mitochondria in the data set.
+
 ```{r, add percentage of mitochondria}
 pbmc[['percent.mt']] <- PercentageFeatureSet(pbmc, pattern = '^MT-')
 ```
 
+Plotting the QC metrics in a violin plot to check the diversity of the data set.
+
+```{r, violinplot for data distribution}
+VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3, pt.size = 0.2)
+```
+
+Plotting the correlation between `nFeature_RNA`, `nCount_RNA`, `percent.mt` variables of the `PBMC` data set.
+
+```{r}
+FeatureScatter(pbmc, 'nFeature_RNA', "percent.mt")
+```
+
+```{r}
+FeatureScatter(pbmc, 'nCount_RNA', "percent.mt")
+```
+
+```{r}
+FeatureScatter(pbmc, "nFeature_RNA", "nCount_RNA")
+```
+
+Removing the data with `< 200` and `> 2500` RNA and more than `5%` mitochondria in the cell.
+
+```{r, QC metrics}
+pbmc <- subset(pbmc, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
+```
+
+## Normalize the data set
+
+Normalizing a data set to adjust gene expression values to make them comparable across all cells.
+
+```{r}
+
+pbmc <- NormalizeData(pbmc)
+
+```
+
+## Feature Engineering
+
+In the feature engineering process, I will select the most features that show the **highest cell-to-cell variation** (i.e, they are highly expressed in some cells, and lowly expressed in others).
