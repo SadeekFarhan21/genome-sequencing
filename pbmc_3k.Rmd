@@ -70,13 +70,7 @@ Plotting the correlation between `nFeature_RNA`, `nCount_RNA`, `percent.mt` vari
 
 ```{r}
 FeatureScatter(pbmc, 'nFeature_RNA', "percent.mt")
-```
-
-```{r}
 FeatureScatter(pbmc, 'nCount_RNA', "percent.mt")
-```
-
-```{r}
 FeatureScatter(pbmc, "nFeature_RNA", "nCount_RNA")
 ```
 
@@ -108,7 +102,7 @@ pbmc <- FindVariableFeatures(pbmc, selection.method = 'vst')
 Finding the top 10 most variable genes
 
 ```{r}
-LabelPoints(plot = VariableFeaturePlot(pbmc), points = head(VariableFeatures(pbmc), 10), repel = TRUE)
+LabelPoints(plot = VariableFeaturePlot(pbmc), points = head(VariableFeatures(pbmc), 10), repel = TRUE, xnudge = 0, ynudge = 0)
 ```
 
 ## Scaling the data
@@ -119,6 +113,25 @@ Applying a linear `transformation('scaling')` prior to performing `PCA`. The fol
 pbmc <- ScaleData(pbmc, features = rownames(pbmc))
 ```
 
+## Principal Component Analysis (PCA)
+
 ```{r}
-class(pbmc)
+pbmc <- RunPCA(pbmc, features = VariableFeatures(object = pbmc))
+```
+
+```{r}
+# Examine and visualize PCA results a few different ways
+print(pbmc[["pca"]], dims = 1:5, nfeatures = 5)
+```
+
+```{r}
+VizDimLoadings(pbmc, dims = 1:2, reduction = "pca")
+```
+
+```{r}
+DimPlot(pbmc, reduction = "pca") + NoLegend()
+```
+
+```{r}
+DimHeatmap(pbmc, dims = 1, cells = 500, balanced = TRUE)
 ```
