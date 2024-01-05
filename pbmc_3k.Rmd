@@ -22,12 +22,34 @@ library(Seurat)
 library(patchwork)
 ```
 
-```{r, load the dataset, show=TRUE, echo=TRUE}
+Loading the `PBMC` dataset from the publicly available[PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) dataset.
+
+```{r, load the PBMC dataset, show=TRUE, echo=TRUE}
 # loading the dataset from the file
 pbmc.data <- Read10X(data.dir = "C:/Users/Farhan/Documents/Genome-Sequencing/pbmc3k_filtered_gene_bc_matrices/filtered_gene_bc_matrices/hg19")
 ```
 
-```{r}
+Creating `Seurat` object with the `pbmc.data` dataset with a minimum cell requirement of `3` and feature of `200`.
 
+```{r, initialize the object}
+# Initialize the object with non-normalized data
+pbmc <- CreateSeuratObject(pbmc.data, project = "pmbc3k", min.cells = 3, min.features = 200)
+```
+
+# Pre-processing workflow
+
+## Quality Control and selecting cells
+
+QC Metrics to keep in mind:
+
+-   Number of unique genes:
+    -   Low quality genes have very few genes
+    -   Cells doublets and multiplets have high gene count
+-   Number of total molecules
+-   Percentage of mitochondria
+
+Adding a new column to for the percentage of mitochondria in the dataset
+```{r, add percentage of mitochondria}
+pbmc[['percent.mt']] <- PercentageFeatureSet(pbmc, pattern = '^MT-')
 ```
 

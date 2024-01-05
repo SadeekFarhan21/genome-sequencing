@@ -1760,36 +1760,10 @@ more then 2700 single cells</p>
 <code>Seurat</code>, and <code>patchwork</code></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYZHBseXLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnN0YXRz4oCZOlxuXG4gICAgZmlsdGVyLCBsYWdcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmJhc2XigJk6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuXG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IFNldXJhdE9iamVjdFxuTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBzcFxuXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYU2V1cmF0T2JqZWN04oCZXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgIGludGVyc2VjdFxuXG5SZWdpc3RlcmVkIFMzIG1ldGhvZCBvdmVyd3JpdHRlbiBieSAnZGF0YS50YWJsZSc6XG4gIG1ldGhvZCAgICAgICAgICAgZnJvbVxuICBwcmludC5kYXRhLnRhYmxlICAgICBcblJlZ2lzdGVyZWQgUzMgbWV0aG9kIG92ZXJ3cml0dGVuIGJ5ICdodG1sd2lkZ2V0cyc6XG4gIG1ldGhvZCAgICAgICAgICAgZnJvbSAgICAgICAgIFxuICBwcmludC5odG1sd2lkZ2V0IHRvb2xzOnJzdHVkaW9cbiJ9 -->
-<pre><code>
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Loading required package: SeuratObject
-Loading required package: sp
-
-Attaching package: ‘SeuratObject’
-
-The following object is masked from ‘package:base’:
-
-    intersect
-
-Registered S3 method overwritten by &#39;data.table&#39;:
-  method           from
-  print.data.table     
-Registered S3 method overwritten by &#39;htmlwidgets&#39;:
-  method           from         
-  print.htmlwidget tools:rstudio</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Loading the <code>PBMC</code> dataset from the publicly available<a href="https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz">PBMC</a>
+dataset.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkaW5nIHRoZSBkYXRhc2V0IGZyb20gdGhlIGZpbGVcbnBibWMuZGF0YSA8LSBSZWFkMTBYKGRhdGEuZGlyID0gXCJDOi9Vc2Vycy9GYXJoYW4vRG9jdW1lbnRzL0dlbm9tZS1TZXF1ZW5jaW5nL3BibWMza19maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzL2ZpbHRlcmVkX2dlbmVfYmNfbWF0cmljZXMvaGcxOVwiKVxuYGBgIn0= -->
@@ -1798,14 +1772,46 @@ pbmc.data &lt;- Read10X(data.dir = &quot;C:/Users/Farhan/Documents/Genome-Sequen
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Creating <code>Seurat</code> object with the <code>pbmc.data</code>
+dataset with a minimum cell requirement of <code>3</code> and feature of
+<code>200</code>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBJbml0aWFsaXplIHRoZSBvYmplY3Qgd2l0aCBub24tbm9ybWFsaXplZCBkYXRhXG5wYm1jIDwtIENyZWF0ZVNldXJhdE9iamVjdChwYm1jLmRhdGEsIHByb2plY3QgPSBcInBtYmMza1wiLCBtaW4uY2VsbHMgPSAzLCBtaW4uZmVhdHVyZXMgPSAyMDApXG5gYGAifQ== -->
+<pre class="r"><code># Initialize the object with non-normalized data
+pbmc &lt;- CreateSeuratObject(pbmc.data, project = &quot;pmbc3k&quot;, min.cells = 3, min.features = 200)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="pre-processing-workflow" class="section level1">
+<h1>Pre-processing workflow</h1>
+<div id="quality-control-and-selecting-cells" class="section level2">
+<h2>Quality Control and selecting cells</h2>
+<p>QC Metrics to keep in mind:</p>
+<ul>
+<li>Number of unique genes:
+<ul>
+<li>Low quality genes have very few genes</li>
+<li>Cells doublets and multiplets have high gene count</li>
+</ul></li>
+<li>Number of total molecules</li>
+<li>Percentage of mitochondria</li>
+</ul>
+<p>Adding a new column to for the percentage of mitochondria in the
+dataset</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGJtY1tbJ3BlcmNlbnQubXQnXV0gPC0gUGVyY2VudGFnZUZlYXR1cmVTZXQocGJtYywgcGF0dGVybiA9ICdeTVQtJylcbmBgYCJ9 -->
+<pre class="r"><code>pbmc[[&#39;percent.mt&#39;]] &lt;- PercentageFeatureSet(pbmc, pattern = &#39;^MT-&#39;)</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNldXJhdCBDbHVzdGVyaW5nIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KLS0tDQplZGl0b3I6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQojIyBTZXR1cCB0aGUgU2V1cmF0IE9iamVjdA0KDQpGb3IgdGhpcyBwcm9qZWN0LCBJIHdpbGwgdXNlIHRoZSBwdWJsaWNseSBhdmFpbGFibGUgUEJNQyBkYXRhc2V0IHdpdGggbW9yZSB0aGVuIDI3MDAgc2luZ2xlIGNlbGxzDQoNClRoZSBsaWJyYXJpZXMgZm9yIHRoaXMgcHJvamVjdCBhcmUgYGRwbHlyYCwgYFNldXJhdGAsIGFuZCBgcGF0Y2h3b3JrYA0KDQpgYGB7ciBpbXBvcnRpbmcgdGhlIGxpYnJhcmllcywgZWNobz1GQUxTRX0NCiMgaW1wb3J0IHRoZSBsaWJyYXJpZXMNCmxpYnJhcnkoZHBseXIpDQpsaWJyYXJ5KFNldXJhdCkNCmxpYnJhcnkocGF0Y2h3b3JrKQ0KYGBgDQoNCmBgYHtyLCBsb2FkIHRoZSBkYXRhc2V0LCBzaG93PVRSVUUsIGVjaG89VFJVRX0NCiMgbG9hZGluZyB0aGUgZGF0YXNldCBmcm9tIHRoZSBmaWxlDQpwYm1jLmRhdGEgPC0gUmVhZDEwWChkYXRhLmRpciA9ICJDOi9Vc2Vycy9GYXJoYW4vRG9jdW1lbnRzL0dlbm9tZS1TZXF1ZW5jaW5nL3BibWMza19maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzL2ZpbHRlcmVkX2dlbmVfYmNfbWF0cmljZXMvaGcxOSIpDQpgYGANCg0KYGBge3J9DQoNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNldXJhdCBDbHVzdGVyaW5nIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KLS0tDQplZGl0b3I6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQojIyBTZXR1cCB0aGUgU2V1cmF0IE9iamVjdA0KDQpGb3IgdGhpcyBwcm9qZWN0LCBJIHdpbGwgdXNlIHRoZSBwdWJsaWNseSBhdmFpbGFibGUgUEJNQyBkYXRhc2V0IHdpdGggbW9yZSB0aGVuIDI3MDAgc2luZ2xlIGNlbGxzDQoNClRoZSBsaWJyYXJpZXMgZm9yIHRoaXMgcHJvamVjdCBhcmUgYGRwbHlyYCwgYFNldXJhdGAsIGFuZCBgcGF0Y2h3b3JrYA0KDQpgYGB7ciBpbXBvcnRpbmcgdGhlIGxpYnJhcmllcywgZWNobz1GQUxTRX0NCiMgaW1wb3J0IHRoZSBsaWJyYXJpZXMNCmxpYnJhcnkoZHBseXIpDQpsaWJyYXJ5KFNldXJhdCkNCmxpYnJhcnkocGF0Y2h3b3JrKQ0KYGBgDQoNCkxvYWRpbmcgdGhlIGBQQk1DYCBkYXRhc2V0IGZyb20gdGhlIHB1YmxpY2x5IGF2YWlsYWJsZVtQQk1DXShodHRwczovL2NmLjEweGdlbm9taWNzLmNvbS9zYW1wbGVzL2NlbGwvcGJtYzNrL3BibWMza19maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzLnRhci5neikgZGF0YXNldC4NCg0KYGBge3IsIGxvYWQgdGhlIFBCTUMgZGF0YXNldCwgc2hvdz1UUlVFLCBlY2hvPVRSVUV9DQojIGxvYWRpbmcgdGhlIGRhdGFzZXQgZnJvbSB0aGUgZmlsZQ0KcGJtYy5kYXRhIDwtIFJlYWQxMFgoZGF0YS5kaXIgPSAiQzovVXNlcnMvRmFyaGFuL0RvY3VtZW50cy9HZW5vbWUtU2VxdWVuY2luZy9wYm1jM2tfZmlsdGVyZWRfZ2VuZV9iY19tYXRyaWNlcy9maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzL2hnMTkiKQ0KYGBgDQoNCkNyZWF0aW5nIGBTZXVyYXRgIG9iamVjdCB3aXRoIHRoZSBgcGJtYy5kYXRhYCBkYXRhc2V0IHdpdGggYSBtaW5pbXVtIGNlbGwgcmVxdWlyZW1lbnQgb2YgYDNgIGFuZCBmZWF0dXJlIG9mIGAyMDBgLg0KDQpgYGB7ciwgaW5pdGlhbGl6ZSB0aGUgb2JqZWN0fQ0KIyBJbml0aWFsaXplIHRoZSBvYmplY3Qgd2l0aCBub24tbm9ybWFsaXplZCBkYXRhDQpwYm1jIDwtIENyZWF0ZVNldXJhdE9iamVjdChwYm1jLmRhdGEsIHByb2plY3QgPSAicG1iYzNrIiwgbWluLmNlbGxzID0gMywgbWluLmZlYXR1cmVzID0gMjAwKQ0KYGBgDQoNCiMgUHJlLXByb2Nlc3Npbmcgd29ya2Zsb3cNCg0KIyMgUXVhbGl0eSBDb250cm9sIGFuZCBzZWxlY3RpbmcgY2VsbHMNCg0KUUMgTWV0cmljcyB0byBrZWVwIGluIG1pbmQ6DQoNCi0gICBOdW1iZXIgb2YgdW5pcXVlIGdlbmVzOg0KICAgIC0gICBMb3cgcXVhbGl0eSBnZW5lcyBoYXZlIHZlcnkgZmV3IGdlbmVzDQogICAgLSAgIENlbGxzIGRvdWJsZXRzIGFuZCBtdWx0aXBsZXRzIGhhdmUgaGlnaCBnZW5lIGNvdW50DQotICAgTnVtYmVyIG9mIHRvdGFsIG1vbGVjdWxlcw0KLSAgIFBlcmNlbnRhZ2Ugb2YgbWl0b2Nob25kcmlhDQoNCkFkZGluZyBhIG5ldyBjb2x1bW4gdG8gZm9yIHRoZSBwZXJjZW50YWdlIG9mIG1pdG9jaG9uZHJpYSBpbiB0aGUgZGF0YXNldA0KYGBge3IsIGFkZCBwZXJjZW50YWdlIG9mIG1pdG9jaG9uZHJpYX0NCnBibWNbWydwZXJjZW50Lm10J11dIDwtIFBlcmNlbnRhZ2VGZWF0dXJlU2V0KHBibWMsIHBhdHRlcm4gPSAnXk1ULScpDQpgYGANCg0K</div>
 
 
 
