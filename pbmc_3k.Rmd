@@ -22,7 +22,7 @@ library(Seurat)
 library(patchwork)
 ```
 
-Loading the `PBMC` data set from the publicly available[PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) data set.
+Loading the `PBMC` data set from the publicly available [PBMC](https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz) data set.
 
 ```{r, load the PBMC data set, show=TRUE, echo=TRUE}
 # loading the data set from the file
@@ -99,3 +99,26 @@ pbmc <- NormalizeData(pbmc)
 ## Feature Engineering
 
 In the feature engineering process, I will select the most features that show the **highest cell-to-cell variation** (i.e, they are highly expressed in some cells, and lowly expressed in others).
+
+```{r, find variable features}
+
+pbmc <- FindVariableFeatures(pbmc, selection.method = 'vst')
+```
+
+Finding the top 10 most variable genes
+
+```{r}
+LabelPoints(plot = VariableFeaturePlot(pbmc), points = head(VariableFeatures(pbmc), 10), repel = TRUE)
+```
+
+## Scaling the data
+
+Applying a linear `transformation('scaling')` prior to performing `PCA`. The following things are happening in this step.
+
+```{r}
+pbmc <- ScaleData(pbmc, features = rownames(pbmc))
+```
+
+```{r}
+class(pbmc)
+```
