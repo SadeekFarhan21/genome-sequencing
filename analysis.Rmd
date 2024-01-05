@@ -10,7 +10,8 @@ editor:
 ---
 
 ## Setup the Seurat Object
-For this project, I will analyze the Peripheral Blood Mononuclear Cells from the 10X Genomics. There are 2,700 single cells that were sequenced on the Illumina NextSeq 500. 
+
+For this project, I will analyze the Peripheral Blood Mononuclear Cells from the 10X Genomics. There are 2,700 single cells that were sequenced on the Illumina NextSeq 500.
 
 Now, I will import the libraries that I will use to perform the clustering.
 
@@ -28,13 +29,13 @@ Now that we have the libraries, we can read the dataset.
 pbmc.data <- Read10X(data.dir = "pbmc3k_filtered_gene_bc_matrices/filtered_gene_bc_matrices/hg19/")
 ```
 
-We want our dataset to be in Seurat object. But, the pbmc.data is in matrix format.   
+We want our dataset to be in Seurat object. But, the pbmc.data is in matrix format.
 
 ```{r}
 # check the dataset
 class(pbmc.data)
 ```
- 
+
 So, the dataset has been read and saved in the pbmc.data variable but the data type is matrix. Now, we will create Seurat object from the dataset.
 
 ```{r}
@@ -45,28 +46,33 @@ pbmc <- CreateSeuratObject(counts = pbmc.data, project = 'pbmc3k', min.cells = 3
 ```{r}
 # visualize the dataset
 pbmc.data[c("CD3D", "TCL1A", "MS4A1"), 1:8]
-```   
+```
 
 ```{r}
 dense.size <- object.size(as.matrix(pbmc.data))
 dense.size
 ```
+
 ```{r}
 sparse.size <- object.size(pbmc.data)
 sparse.size
 ```
+
 ```{r}
 dense.size / sparse.size
 ```
+
 # Standard pre-processing workflow
+
 These represent the selection and filtration of cells based on QC metrics, data normalization and scaling, and the detection of highly variable features.
 
 ## QC and selecting cells for further analysis
+
 In this step, we will exluce some of the unnecesseray data from the datast, so ensure proper quality control.
+
 ```{r}
 pbmc[["percent.mt"]] <- PercentageFeatureSet(pbmc, pattern = "^MT-")
 ```
-
 
 ```{r}
 VlnPlot(pbmc, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)

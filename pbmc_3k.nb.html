@@ -1754,11 +1754,10 @@ display: none;
 <!-- rnb-text-begin -->
 <div id="setup-the-seurat-object" class="section level2">
 <h2>Setup the Seurat Object</h2>
-<p>For this project, I will analyze the Peripheral Blood Mononuclear
-Cells from the 10X Genomics. There are 2,700 single cells that were
-sequenced on the Illumina NextSeq 500.</p>
-<p>Now, I will import the libraries that I will use to perform the
-clustering.</p>
+<p>For this project, I will use the publicly available PBMC dataset with
+more then 2700 single cells</p>
+<p>The libraries for this project are <code>dplyr</code>,
+<code>Seurat</code>, and <code>patchwork</code></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbXBvcnQgdGhlIGxpYnJhcmllc1xubGlicmFyeShkcGx5cilcbmxpYnJhcnkoU2V1cmF0KVxubGlicmFyeShwYXRjaHdvcmspXG5gYGAifQ== -->
@@ -1769,94 +1768,12 @@ library(patchwork)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Now that we have the libraries, we can read the dataset.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyByZWFkIHRoZSBkYXRhc2V0XG5wYm1jLmRhdGEgPC0gUmVhZDEwWChkYXRhLmRpciA9IFwicGJtYzNrX2ZpbHRlcmVkX2dlbmVfYmNfbWF0cmljZXMvZmlsdGVyZWRfZ2VuZV9iY19tYXRyaWNlcy9oZzE5L1wiKVxuYGBgIn0= -->
-<pre class="r"><code># read the dataset
-pbmc.data &lt;- Read10X(data.dir = &quot;pbmc3k_filtered_gene_bc_matrices/filtered_gene_bc_matrices/hg19/&quot;)</code></pre>
-<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>We want our dataset to be in Seurat object. But, the pbmc.data is in
-matrix format.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjaGVjayB0aGUgZGF0YXNldFxuY2xhc3MocGJtYy5kYXRhKVxuYGBgIn0= -->
-<pre class="r"><code># check the dataset
-class(pbmc.data)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>So, the dataset has been read and saved in the pbmc.data variable but
-the data type is matrix. Now, we will create Seurat object from the
-dataset.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDcmVhdGUgdGhlIFNldXJhdCBPYmplY3RcbnBibWMgPC0gQ3JlYXRlU2V1cmF0T2JqZWN0KGNvdW50cyA9IHBibWMuZGF0YSwgcHJvamVjdCA9ICdwYm1jM2snLCBtaW4uY2VsbHMgPSAzLCBtaW4uZmVhdHVyZXMgPSAyMDApXG5gYGAifQ== -->
-<pre class="r"><code># Create the Seurat Object
-pbmc &lt;- CreateSeuratObject(counts = pbmc.data, project = &#39;pbmc3k&#39;, min.cells = 3, min.features = 200)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB2aXN1YWxpemUgdGhlIGRhdGFzZXRcbnBibWMuZGF0YVtjKFwiQ0QzRFwiLCBcIlRDTDFBXCIsIFwiTVM0QTFcIiksIDE6OF1cbmBgYCJ9 -->
-<pre class="r"><code># visualize the dataset
-pbmc.data[c(&quot;CD3D&quot;, &quot;TCL1A&quot;, &quot;MS4A1&quot;), 1:8]</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVuc2Uuc2l6ZSA8LSBvYmplY3Quc2l6ZShhcy5tYXRyaXgocGJtYy5kYXRhKSlcbmRlbnNlLnNpemVcbmBgYCJ9 -->
-<pre class="r"><code>dense.size &lt;- object.size(as.matrix(pbmc.data))
-dense.size</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3BhcnNlLnNpemUgPC0gb2JqZWN0LnNpemUocGJtYy5kYXRhKVxuc3BhcnNlLnNpemVcbmBgYCJ9 -->
-<pre class="r"><code>sparse.size &lt;- object.size(pbmc.data)
-sparse.size</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGVuc2Uuc2l6ZSAvIHNwYXJzZS5zaXplXG5gYGAifQ== -->
-<pre class="r"><code>dense.size / sparse.size</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-</div>
-<div id="standard-pre-processing-workflow" class="section level1">
-<h1>Standard pre-processing workflow</h1>
-<p>These represent the selection and filtration of cells based on QC
-metrics, data normalization and scaling, and the detection of highly
-variable features.</p>
-<div id="qc-and-selecting-cells-for-further-analysis" class="section level2">
-<h2>QC and selecting cells for further analysis</h2>
-<p>In this step, we will exluce some of the unnecesseray data from the
-datast, so ensure proper quality control.</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGJtY1tbXCJwZXJjZW50Lm10XCJdXSA8LSBQZXJjZW50YWdlRmVhdHVyZVNldChwYm1jLCBwYXR0ZXJuID0gXCJeTVQtXCIpXG5gYGAifQ== -->
-<pre class="r"><code>pbmc[[&quot;percent.mt&quot;]] &lt;- PercentageFeatureSet(pbmc, pattern = &quot;^MT-&quot;)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmxuUGxvdChwYm1jLCBmZWF0dXJlcyA9IGMoXCJuRmVhdHVyZV9STkFcIiwgXCJuQ291bnRfUk5BXCIsIFwicGVyY2VudC5tdFwiKSwgbmNvbCA9IDMpXG5gYGAifQ== -->
-<pre class="r"><code>VlnPlot(pbmc, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;, &quot;percent.mt&quot;), ncol = 3)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-chunk-end -->
-</div>
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNldXJhdCBDbHVzdGVyaW5nIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KLS0tDQplZGl0b3I6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQojIyBTZXR1cCB0aGUgU2V1cmF0IE9iamVjdA0KDQpGb3IgdGhpcyBwcm9qZWN0LCBJIHdpbGwgYW5hbHl6ZSB0aGUgUGVyaXBoZXJhbCBCbG9vZCBNb25vbnVjbGVhciBDZWxscyBmcm9tIHRoZSAxMFggR2Vub21pY3MuIFRoZXJlIGFyZSAyLDcwMCBzaW5nbGUgY2VsbHMgdGhhdCB3ZXJlIHNlcXVlbmNlZCBvbiB0aGUgSWxsdW1pbmEgTmV4dFNlcSA1MDAuDQoNCk5vdywgSSB3aWxsIGltcG9ydCB0aGUgbGlicmFyaWVzIHRoYXQgSSB3aWxsIHVzZSB0byBwZXJmb3JtIHRoZSBjbHVzdGVyaW5nLg0KDQpgYGB7cn0NCiMgaW1wb3J0IHRoZSBsaWJyYXJpZXMNCmxpYnJhcnkoZHBseXIpDQpsaWJyYXJ5KFNldXJhdCkNCmxpYnJhcnkocGF0Y2h3b3JrKQ0KYGBgDQoNCk5vdyB0aGF0IHdlIGhhdmUgdGhlIGxpYnJhcmllcywgd2UgY2FuIHJlYWQgdGhlIGRhdGFzZXQuDQoNCmBgYHtyfQ0KIyByZWFkIHRoZSBkYXRhc2V0DQpwYm1jLmRhdGEgPC0gUmVhZDEwWChkYXRhLmRpciA9ICJwYm1jM2tfZmlsdGVyZWRfZ2VuZV9iY19tYXRyaWNlcy9maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzL2hnMTkvIikNCmBgYA0KDQpXZSB3YW50IG91ciBkYXRhc2V0IHRvIGJlIGluIFNldXJhdCBvYmplY3QuIEJ1dCwgdGhlIHBibWMuZGF0YSBpcyBpbiBtYXRyaXggZm9ybWF0Lg0KDQpgYGB7cn0NCiMgY2hlY2sgdGhlIGRhdGFzZXQNCmNsYXNzKHBibWMuZGF0YSkNCmBgYA0KDQpTbywgdGhlIGRhdGFzZXQgaGFzIGJlZW4gcmVhZCBhbmQgc2F2ZWQgaW4gdGhlIHBibWMuZGF0YSB2YXJpYWJsZSBidXQgdGhlIGRhdGEgdHlwZSBpcyBtYXRyaXguIE5vdywgd2Ugd2lsbCBjcmVhdGUgU2V1cmF0IG9iamVjdCBmcm9tIHRoZSBkYXRhc2V0Lg0KDQpgYGB7cn0NCiMgQ3JlYXRlIHRoZSBTZXVyYXQgT2JqZWN0DQpwYm1jIDwtIENyZWF0ZVNldXJhdE9iamVjdChjb3VudHMgPSBwYm1jLmRhdGEsIHByb2plY3QgPSAncGJtYzNrJywgbWluLmNlbGxzID0gMywgbWluLmZlYXR1cmVzID0gMjAwKQ0KYGBgDQoNCmBgYHtyfQ0KIyB2aXN1YWxpemUgdGhlIGRhdGFzZXQNCnBibWMuZGF0YVtjKCJDRDNEIiwgIlRDTDFBIiwgIk1TNEExIiksIDE6OF0NCmBgYA0KDQpgYGB7cn0NCmRlbnNlLnNpemUgPC0gb2JqZWN0LnNpemUoYXMubWF0cml4KHBibWMuZGF0YSkpDQpkZW5zZS5zaXplDQpgYGANCg0KYGBge3J9DQpzcGFyc2Uuc2l6ZSA8LSBvYmplY3Quc2l6ZShwYm1jLmRhdGEpDQpzcGFyc2Uuc2l6ZQ0KYGBgDQoNCmBgYHtyfQ0KZGVuc2Uuc2l6ZSAvIHNwYXJzZS5zaXplDQpgYGANCg0KIyBTdGFuZGFyZCBwcmUtcHJvY2Vzc2luZyB3b3JrZmxvdw0KDQpUaGVzZSByZXByZXNlbnQgdGhlIHNlbGVjdGlvbiBhbmQgZmlsdHJhdGlvbiBvZiBjZWxscyBiYXNlZCBvbiBRQyBtZXRyaWNzLCBkYXRhIG5vcm1hbGl6YXRpb24gYW5kIHNjYWxpbmcsIGFuZCB0aGUgZGV0ZWN0aW9uIG9mIGhpZ2hseSB2YXJpYWJsZSBmZWF0dXJlcy4NCg0KIyMgUUMgYW5kIHNlbGVjdGluZyBjZWxscyBmb3IgZnVydGhlciBhbmFseXNpcw0KDQpJbiB0aGlzIHN0ZXAsIHdlIHdpbGwgZXhsdWNlIHNvbWUgb2YgdGhlIHVubmVjZXNzZXJheSBkYXRhIGZyb20gdGhlIGRhdGFzdCwgc28gZW5zdXJlIHByb3BlciBxdWFsaXR5IGNvbnRyb2wuDQoNCmBgYHtyfQ0KcGJtY1tbInBlcmNlbnQubXQiXV0gPC0gUGVyY2VudGFnZUZlYXR1cmVTZXQocGJtYywgcGF0dGVybiA9ICJeTVQtIikNCmBgYA0KDQpgYGB7cn0NClZsblBsb3QocGJtYywgZmVhdHVyZXMgPSBjKCJuRmVhdHVyZV9STkEiLCAibkNvdW50X1JOQSIsICJwZXJjZW50Lm10IiksIG5jb2wgPSAzKQ0KYGBgDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNldXJhdCBDbHVzdGVyaW5nIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KLS0tDQplZGl0b3I6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQojIyBTZXR1cCB0aGUgU2V1cmF0IE9iamVjdA0KDQpGb3IgdGhpcyBwcm9qZWN0LCBJIHdpbGwgdXNlIHRoZSBwdWJsaWNseSBhdmFpbGFibGUgUEJNQyBkYXRhc2V0IHdpdGggbW9yZSB0aGVuIDI3MDAgc2luZ2xlIGNlbGxzDQoNClRoZSBsaWJyYXJpZXMgZm9yIHRoaXMgcHJvamVjdCBhcmUgYGRwbHlyYCwgYFNldXJhdGAsIGFuZCBgcGF0Y2h3b3JrYA0KDQpgYGB7ciBpbXBvcnRpbmcgdGhlIGxpYnJhcmllcywgZWNobz1UUlVFfQ0KIyBpbXBvcnQgdGhlIGxpYnJhcmllcw0KbGlicmFyeShkcGx5cikNCmxpYnJhcnkoU2V1cmF0KQ0KbGlicmFyeShwYXRjaHdvcmspDQpgYGANCg0KYGBge3IsIGxvYWQgdGhlIGRhdGFzdCwgc2hvdz1UUlVFLCBlY2hvPVRSVUV9DQoNCmBgYA0K</div>
 
 
 
@@ -1903,7 +1820,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("analysis.Rmd");
+  window.initializeSourceEmbed("pbmc_3k.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

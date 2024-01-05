@@ -1,0 +1,27 @@
+---
+title: "Seurat Clustering"
+output: html_notebook
+---
+
+---
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Setup the Seurat Object
+
+For this project, I will use the publicly available PBMC dataset with more then 2700 single cells
+
+The libraries for this project are `dplyr`, `Seurat`, and `patchwork`
+
+```{r importing the libraries, echo=TRUE}
+# import the libraries
+library(dplyr)
+library(Seurat)
+library(patchwork)
+```
+
+```{r, load the datast, show=TRUE, echo=TRUE}
+
+```
