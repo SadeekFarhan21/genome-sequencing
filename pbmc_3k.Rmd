@@ -15,13 +15,19 @@ For this project, I will use the publicly available PBMC dataset with more then 
 
 The libraries for this project are `dplyr`, `Seurat`, and `patchwork`
 
-```{r importing the libraries, echo=TRUE}
+```{r importing the libraries, echo=FALSE}
 # import the libraries
 library(dplyr)
 library(Seurat)
 library(patchwork)
 ```
 
-```{r, load the datast, show=TRUE, echo=TRUE}
+```{r, load the dataset, show=TRUE, echo=TRUE}
+# loading the dataset from the file
+pbmc.data <- Read10X(data.dir = "C:/Users/Farhan/Documents/Genome-Sequencing/pbmc3k_filtered_gene_bc_matrices/filtered_gene_bc_matrices/hg19")
+```
+
+```{r}
 
 ```
+

@@ -1760,20 +1760,52 @@ more then 2700 single cells</p>
 <code>Seurat</code>, and <code>patchwork</code></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBpbXBvcnQgdGhlIGxpYnJhcmllc1xubGlicmFyeShkcGx5cilcbmxpYnJhcnkoU2V1cmF0KVxubGlicmFyeShwYXRjaHdvcmspXG5gYGAifQ== -->
-<pre class="r"><code># import the libraries
-library(dplyr)
-library(Seurat)
-library(patchwork)</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYZHBseXLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOnN0YXRz4oCZOlxuXG4gICAgZmlsdGVyLCBsYWdcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOmJhc2XigJk6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuXG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IFNldXJhdE9iamVjdFxuTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBzcFxuXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYU2V1cmF0T2JqZWN04oCZXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgIGludGVyc2VjdFxuXG5SZWdpc3RlcmVkIFMzIG1ldGhvZCBvdmVyd3JpdHRlbiBieSAnZGF0YS50YWJsZSc6XG4gIG1ldGhvZCAgICAgICAgICAgZnJvbVxuICBwcmludC5kYXRhLnRhYmxlICAgICBcblJlZ2lzdGVyZWQgUzMgbWV0aG9kIG92ZXJ3cml0dGVuIGJ5ICdodG1sd2lkZ2V0cyc6XG4gIG1ldGhvZCAgICAgICAgICAgZnJvbSAgICAgICAgIFxuICBwcmludC5odG1sd2lkZ2V0IHRvb2xzOnJzdHVkaW9cbiJ9 -->
+<pre><code>
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: SeuratObject
+Loading required package: sp
+
+Attaching package: ‘SeuratObject’
+
+The following object is masked from ‘package:base’:
+
+    intersect
+
+Registered S3 method overwritten by &#39;data.table&#39;:
+  method           from
+  print.data.table     
+Registered S3 method overwritten by &#39;htmlwidgets&#39;:
+  method           from         
+  print.htmlwidget tools:rstudio</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBsb2FkaW5nIHRoZSBkYXRhc2V0IGZyb20gdGhlIGZpbGVcbnBibWMuZGF0YSA8LSBSZWFkMTBYKGRhdGEuZGlyID0gXCJDOi9Vc2Vycy9GYXJoYW4vRG9jdW1lbnRzL0dlbm9tZS1TZXF1ZW5jaW5nL3BibWMza19maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzL2ZpbHRlcmVkX2dlbmVfYmNfbWF0cmljZXMvaGcxOVwiKVxuYGBgIn0= -->
+<pre class="r"><code># loading the dataset from the file
+pbmc.data &lt;- Read10X(data.dir = &quot;C:/Users/Farhan/Documents/Genome-Sequencing/pbmc3k_filtered_gene_bc_matrices/filtered_gene_bc_matrices/hg19&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNldXJhdCBDbHVzdGVyaW5nIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KLS0tDQplZGl0b3I6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQojIyBTZXR1cCB0aGUgU2V1cmF0IE9iamVjdA0KDQpGb3IgdGhpcyBwcm9qZWN0LCBJIHdpbGwgdXNlIHRoZSBwdWJsaWNseSBhdmFpbGFibGUgUEJNQyBkYXRhc2V0IHdpdGggbW9yZSB0aGVuIDI3MDAgc2luZ2xlIGNlbGxzDQoNClRoZSBsaWJyYXJpZXMgZm9yIHRoaXMgcHJvamVjdCBhcmUgYGRwbHlyYCwgYFNldXJhdGAsIGFuZCBgcGF0Y2h3b3JrYA0KDQpgYGB7ciBpbXBvcnRpbmcgdGhlIGxpYnJhcmllcywgZWNobz1UUlVFfQ0KIyBpbXBvcnQgdGhlIGxpYnJhcmllcw0KbGlicmFyeShkcGx5cikNCmxpYnJhcnkoU2V1cmF0KQ0KbGlicmFyeShwYXRjaHdvcmspDQpgYGANCg0KYGBge3IsIGxvYWQgdGhlIGRhdGFzdCwgc2hvdz1UUlVFLCBlY2hvPVRSVUV9DQoNCmBgYA0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlNldXJhdCBDbHVzdGVyaW5nIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KLS0tDQplZGl0b3I6IA0KICBtYXJrZG93bjogDQogICAgd3JhcDogNzINCi0tLQ0KDQojIyBTZXR1cCB0aGUgU2V1cmF0IE9iamVjdA0KDQpGb3IgdGhpcyBwcm9qZWN0LCBJIHdpbGwgdXNlIHRoZSBwdWJsaWNseSBhdmFpbGFibGUgUEJNQyBkYXRhc2V0IHdpdGggbW9yZSB0aGVuIDI3MDAgc2luZ2xlIGNlbGxzDQoNClRoZSBsaWJyYXJpZXMgZm9yIHRoaXMgcHJvamVjdCBhcmUgYGRwbHlyYCwgYFNldXJhdGAsIGFuZCBgcGF0Y2h3b3JrYA0KDQpgYGB7ciBpbXBvcnRpbmcgdGhlIGxpYnJhcmllcywgZWNobz1GQUxTRX0NCiMgaW1wb3J0IHRoZSBsaWJyYXJpZXMNCmxpYnJhcnkoZHBseXIpDQpsaWJyYXJ5KFNldXJhdCkNCmxpYnJhcnkocGF0Y2h3b3JrKQ0KYGBgDQoNCmBgYHtyLCBsb2FkIHRoZSBkYXRhc2V0LCBzaG93PVRSVUUsIGVjaG89VFJVRX0NCiMgbG9hZGluZyB0aGUgZGF0YXNldCBmcm9tIHRoZSBmaWxlDQpwYm1jLmRhdGEgPC0gUmVhZDEwWChkYXRhLmRpciA9ICJDOi9Vc2Vycy9GYXJoYW4vRG9jdW1lbnRzL0dlbm9tZS1TZXF1ZW5jaW5nL3BibWMza19maWx0ZXJlZF9nZW5lX2JjX21hdHJpY2VzL2ZpbHRlcmVkX2dlbmVfYmNfbWF0cmljZXMvaGcxOSIpDQpgYGANCg0KYGBge3J9DQoNCmBgYA0KDQo=</div>
 
 
 
